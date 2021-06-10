@@ -1,8 +1,7 @@
-package rocks.shumyk.patterns.creational.builder.person;
+package rocks.shumyk.patterns.creational.builder.inheritance.recursive;
 
 import lombok.Data;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
 @ToString

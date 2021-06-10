@@ -1,4 +1,4 @@
-package rocks.shumyk.patterns.creational.builder.html;
+package rocks.shumyk.patterns.creational.builder.fluent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

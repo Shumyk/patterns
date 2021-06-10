@@ -1,4 +1,4 @@
-package rocks.shumyk.patterns.creational.builder.person;
+package rocks.shumyk.patterns.creational.builder.inheritance.recursive;
 
 import lombok.extern.slf4j.Slf4j;
 
