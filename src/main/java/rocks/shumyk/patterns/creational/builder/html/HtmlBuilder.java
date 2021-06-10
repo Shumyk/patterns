@@ -13,14 +13,16 @@ public class HtmlBuilder {
 		root.setName(rootName);
 	}
 
-	public void addChild(final String childName, final String childText) {
+	public HtmlBuilder addChild(final String childName, final String childText) {
 		final var childElement = new HtmlElement(childName, childText);
 		root.getElements().add(childElement);
+		return this;
 	}
 
-	public void clear() {
+	public HtmlBuilder clear() {
 		root = new HtmlElement();
 		root.setName(rootName);
+		return this;
 	}
 
 	@Override
@@ -29,9 +31,13 @@ public class HtmlBuilder {
 	}
 
 	public static void main(String[] args) {
-		final var builder = new HtmlBuilder("ul");
-		builder.addChild("li", "hello");
-		builder.addChild("li", "world");
+		final var builder = new HtmlBuilder("ul")
+			.addChild("li", "i")
+			.addChild("li", "wanna")
+			.addChild("li", "die")
+			.clear()
+			.addChild("li", "i'm")
+			.addChild("li", "good");
 		log.info("\n{}", builder);
 	}
 }
