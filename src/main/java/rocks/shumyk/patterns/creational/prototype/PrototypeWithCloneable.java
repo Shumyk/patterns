@@ -32,7 +32,7 @@ class Person implements Cloneable {
 	}
 }
 
-// showcase of using cloneable approach, while it is not recommended to use it (cause of potential bugs as a cause of trickiness of implementation)
+// showcase of using cloneable approach, while it is not recommended to use (potential bugs as a cause of trickiness of implementation)
 // instead use copy constructor, copy factory, builder copy
 public class PrototypeWithCloneable {
 	public static void main(String[] args) throws CloneNotSupportedException {
