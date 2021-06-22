@@ -32,27 +32,13 @@ class Main {
 		singleton.setValue(111);
 
 		var filename = "singleton.bin";
-		saveToFile(singleton, filename);
+		SerializationUtils.saveToFile(singleton, filename);
 
 		singleton.setValue(222);
 
-		final BasicSingleton deserializedSingleton = readFromFile(filename);
+		final BasicSingleton deserializedSingleton = SerializationUtils.readFromFile(filename);
 		System.out.println("equality of singletons: " + (singleton == deserializedSingleton));
 		System.out.println("initial singleton value: " + singleton.getValue());
 		System.out.println("deserialized singleton value: " + deserializedSingleton.getValue());
-	}
-
-	static void saveToFile(final BasicSingleton singleton, final String filename) throws IOException {
-		try (var fileOut = new FileOutputStream(filename);
-			 var out = new ObjectOutputStream(fileOut)) {
-			out.writeObject(singleton);
-		}
-	}
-
-	static BasicSingleton readFromFile(final String filename) throws IOException, ClassNotFoundException {
-		try (var fileIn = new FileInputStream(filename);
-			 var in = new ObjectInputStream(fileIn)) {
-			return (BasicSingleton) in.readObject();
-		}
 	}
 }
