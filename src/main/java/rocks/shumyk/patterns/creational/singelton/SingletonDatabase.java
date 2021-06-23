@@ -1,6 +1,7 @@
 package rocks.shumyk.patterns.creational.singelton;
 
 import com.google.common.collect.Iterables;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +14,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+interface Database {
+	int getPopulation(String name);
+}
 
 @Slf4j
-public class SingletonDatabase {
+public class SingletonDatabase implements Database {
 
 	private static final SingletonDatabase INSTANCE = new SingletonDatabase();
 
@@ -52,6 +56,24 @@ public class SingletonDatabase {
 	}
 }
 
+// dummy database to be injected for test
+class DummyDatabase implements Database {
+
+	private final Dictionary<String, Integer> data = new Hashtable<>();
+
+	public DummyDatabase() {
+		data.put("alpha", 1);
+		data.put("beta", 2);
+		data.put("gamma", 3);
+	}
+
+	@Override
+	public int getPopulation(String name) {
+		return data.get(name);
+	}
+}
+
+
 class SingletonRecordFinder {
 	public int getTotalPopulation(final List<String> names) {
 		return names.stream()
@@ -60,13 +82,32 @@ class SingletonRecordFinder {
 	}
 }
 
+/* Here dependency injection implemented, so we can pass dummy database for test */
+@RequiredArgsConstructor
+class ConfigurableRecordFinder {
+	private final Database database;
+
+	public int getTotalPopulation(final List<String> names) {
+		return names.stream()
+			.map(database::getPopulation)
+			.reduce(0, Integer::sum);
+	}
+}
+
 class SingletonDatabaseTest {
 
-	@Test
+	@Test // not a unit test, it's integration test, cause real DB loads for this
 	public void singletonTotalPopulationTest() {
 		final var finder = new SingletonRecordFinder();
-		final List<String> cities = List.of("Seoul", "Mexico City");
-		final int totalPopulation = finder.getTotalPopulation(cities);
+		final var cities = List.of("Seoul", "Mexico City");
+		final var totalPopulation = finder.getTotalPopulation(cities);
 		assertEquals(17500000 + 17400000, totalPopulation);
+	}
+
+	@Test // proper unit test with dummy database injected
+	public void dependentPopulationTest() {
+		final var dummyDatabase = new DummyDatabase();
+		final var finder = new ConfigurableRecordFinder(dummyDatabase);
+		assertEquals(4, finder.getTotalPopulation(List.of("alpha", "gamma")));
 	}
 }
