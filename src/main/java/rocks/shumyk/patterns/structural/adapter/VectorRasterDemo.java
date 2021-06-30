@@ -3,9 +3,8 @@ package rocks.shumyk.patterns.structural.adapter;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 // simple point
 @Data(staticConstructor = "of")
@@ -40,12 +39,20 @@ class VectorRectangle extends VectorObject {
 
 // out adapter for line -> point transformation
 @Slf4j
-class LineToPointAdapter extends ArrayList<Point> {
+class LineToPointAdapter implements Iterable<Point> {
 
 	private static int count = 0;
 
+	private static final Map<Integer, List<Point>> cache = new HashMap<>();
+	private final int hash;
+
 	public LineToPointAdapter(final Line line) {
+		hash = line.hashCode();
+		if (cache.containsKey(hash)) return;
+
 		log.info("{}: generating point for line [{},{}]-[{},{}] (no caching)", ++count, line.getStart().getX(), line.getStart().getY(), line.getEnd().getX(), line.getEnd().getY());
+
+		final List<Point> points = new ArrayList<>();
 
 		final int left = Math.min(line.getStart().getX(), line.getEnd().getX());
 		final int right = Math.max(line.getStart().getX(), line.getEnd().getX());
@@ -56,13 +63,29 @@ class LineToPointAdapter extends ArrayList<Point> {
 
 		if (0 == dx) {
 			for (int y = top; y <= bottom; ++y) {
-				add(Point.of(left, y));
+				points.add(Point.of(left, y));
 			}
 		} else if (0 == dy) {
 			for (int x = left; x <= right; ++x) {
-				add(Point.of(x, top));
+				points.add(Point.of(x, top));
 			}
 		}
+		cache.put(hash, points);
+	}
+
+	@Override
+	public Iterator<Point> iterator() {
+		return cache.get(hash).iterator();
+	}
+
+	@Override
+	public void forEach(Consumer<? super Point> action) {
+		cache.get(hash).forEach(action);
+	}
+
+	@Override
+	public Spliterator<Point> spliterator() {
+		return cache.get(hash).spliterator();
 	}
 }
 
@@ -91,6 +114,7 @@ public class VectorRasterDemo {
 	}
 
 	public static void main(String[] args) {
+		draw();
 		draw();
 	}
 }
