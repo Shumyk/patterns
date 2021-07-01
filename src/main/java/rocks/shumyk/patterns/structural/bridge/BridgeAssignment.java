@@ -1,31 +1,31 @@
 package rocks.shumyk.patterns.structural.bridge;
 
-interface Renderer {
+interface BasicRenderer {
 	String whatToRenderAs();
 }
-class VectorRenderer implements Renderer {
+class BasicVectorRenderer implements BasicRenderer {
 	@Override public String whatToRenderAs() {
 		return "lines";
 	}
 }
-class RasterRenderer implements Renderer {
+class BasicRasterRenderer implements BasicRenderer {
 	@Override public String whatToRenderAs() {
 		return "pixels";
 	}
 }
 
-abstract class Shape {
-	protected final Renderer renderer;
+abstract class ShapeWithRenderer {
+	protected final BasicRenderer renderer;
 
-	Shape(Renderer renderer) {
+	ShapeWithRenderer(BasicRenderer renderer) {
 		this.renderer = renderer;
 	}
 
 	public abstract String getName();
 }
 
-class Triangle extends Shape {
-	public Triangle(Renderer renderer) {
+class Triangle extends ShapeWithRenderer {
+	public Triangle(BasicRenderer renderer) {
 		super(renderer);
 	}
 
@@ -39,8 +39,8 @@ class Triangle extends Shape {
 }
 // imagine VectorTriangle and RasterTriangle are here too
 
-class Square extends Shape {
-	public Square(Renderer renderer) {
+class Square extends ShapeWithRenderer {
+	public Square(BasicRenderer renderer) {
 		super(renderer);
 	}
 
@@ -54,13 +54,13 @@ class Square extends Shape {
 }
 
 class VectorSquare extends Square {
-	public VectorSquare(Renderer renderer) {
+	public VectorSquare(BasicRenderer renderer) {
 		super(renderer);
 	}
 }
 
 class RasterSquare extends Square {
-	public RasterSquare(Renderer renderer) {
+	public RasterSquare(BasicRenderer renderer) {
 		super(renderer);
 	}
 }
