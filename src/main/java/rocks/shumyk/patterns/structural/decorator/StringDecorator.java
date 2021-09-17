@@ -12,6 +12,10 @@ interface StringExcludes {
 	String formatted(Object... args);
 }
 
+/**
+ * Implementing Decorator pattern with final class String.
+ * Firstly, generating all delegates method to String object and then adding new functionality - vowelsNumber()
+ */
 @RequiredArgsConstructor
 class MagicString {
 	private static final String VOWELS = "aeiou";
