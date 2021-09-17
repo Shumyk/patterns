@@ -2,6 +2,10 @@ package rocks.shumyk.patterns.creational.builder.fluent;
 
 import lombok.extern.slf4j.Slf4j;
 
+/*
+	This builder is called fluent cause methods responsive for adding new info into the main object
+	return reference for the builder reference, hence user can operate on Fluent Interface.
+ */
 @Slf4j
 public class HtmlBuilder {
 
