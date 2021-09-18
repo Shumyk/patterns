@@ -15,7 +15,7 @@ interface Human {
 }
 
 @Slf4j
-class Person implements Human {
+class SimplePerson implements Human {
 	@Override
 	public void walk() {
 		log.info("I am walking");
@@ -63,7 +63,7 @@ public class DynamicProxyForLogging {
 	}
 
 	public static void main(String[] args) {
-		final Person person = new Person();
+		final SimplePerson person = new SimplePerson();
 		final Human loggedPerson = withLogging(person, Human.class);
 		loggedPerson.talk();
 		loggedPerson.walk();
